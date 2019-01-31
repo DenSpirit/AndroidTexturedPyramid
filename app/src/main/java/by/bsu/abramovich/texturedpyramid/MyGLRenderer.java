@@ -1,4 +1,5 @@
 package by.bsu.abramovich.texturedpyramid;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,10 +23,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     final int textureObjectsID[] = new int[8];
 
-
-
-
-    public MyGLRenderer(Context context){
+    public MyGLRenderer(Context context) {
         this.context = context;
     }
 
@@ -41,6 +39,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
         GLES20.glClearColor(0.9f,1f,0.9f,1f);
+
         pyramid = new Pyramid();
 
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
@@ -68,15 +67,19 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             bitmap.recycle();
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,0); //Unbind
         }
-
-
-
     }
 
-
+    //frustumM(float[] m, int offset, float left, float right, float bottom, float top, float near, float far)
+//multiplyMM(float[] result, int resultOffset, float[] lhs, int lhsOffset, float[] rhs, int rhsOffset)
+//orthoM(float[] m, int mOffset, float left, float right, float bottom, float top, float near, float far)
+//perspectiveM(float[] m, int offset, float fovy, float aspect, float zNear, float zFar)
+//rotateM(float[] m, int mOffset, float a, float x, float y, float z)
+//scaleM(float[] m, int mOffset, float x, float y, float z)
+//setLookAtM(float[] rm, int rmOffset, float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ,
+//                    float upX, float upY, float upZ)
 
     @Override
-    public void onSurfaceChanged(GL10 gl10, int w, int h) {
+     public void onSurfaceChanged(GL10 gl10, int w, int h) {
         GLES20.glViewport(0,0,w,h);
 
         float ratio = w > h?(float)w/h:(float)h/w;
@@ -96,7 +99,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mMVPMatrix,0,mViewMatrix,0,mModelMatrix,0);
 
         Matrix.multiplyMM(mMVPMatrix,0,mProjectionMatrix,0,mMVPMatrix,0);
-
 
 
     }
