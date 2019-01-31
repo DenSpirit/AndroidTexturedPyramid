@@ -1,5 +1,6 @@
 package by.bsu.abramovich.texturedpyramid;
 import android.opengl.GLES20;
+import android.opengl.Matrix;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -40,7 +41,9 @@ public class Pyramid {
             -0.8f, 0.8f,-0.8f, 0f,0f
     };
 
-    static float vectorToLight[] ={0f,3f,10f};
+    static float vectorToLight[] ={2f, 0f, 0.5f};
+    final float lengthTL = (float) Math.sqrt(vectorToLight[0]*vectorToLight[0]+
+            vectorToLight[1]*vectorToLight[1]+vectorToLight[2]*vectorToLight[2]);
 
 
 
@@ -92,7 +95,7 @@ public class Pyramid {
         GLES20.glLinkProgram(mProgram);
     }
 
-    public void draw(float[] mvpMatrix,int[] textureData){
+    public void draw(float[] mvpMatrix,int[] textureData) {
 
         GLES20.glUseProgram(mProgram);
         mPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition");
@@ -144,25 +147,29 @@ public class Pyramid {
             ny=(float) (ny/lengthN);
             nz=(float) (nz/lengthN);
 
-            float lengthTL = (float) Math.sqrt(vectorToLight[0]*vectorToLight[0]+
-                    vectorToLight[1]*vectorToLight[1]+vectorToLight[2]*vectorToLight[2]);
-            vectorToLight[0] = (float) (vectorToLight[0]/lengthTL);
-            vectorToLight[1] = (float) (vectorToLight[1]/lengthTL);
-            vectorToLight[2] = (float) (vectorToLight[2]/lengthTL);
+            float[] norm = new float[]{
+                    nx, ny, nz, 1, 0, 0, 0, 1
+            };
+
+            Matrix.multiplyMV(norm, 4, mvpMatrix, 0, norm ,0);
+            nx = norm[3];
+            ny = norm[4];
+            nz = norm[5];
+
 
             //Рассчитываем косинус угла между нормалью и вектором источника света
-            float cos_value = nx*vectorToLight[0]+ny*vectorToLight[1]+nz*vectorToLight[2];
-            if(cos_value<0) cos_value = 0.0f;
+            float cosValue = (nx*vectorToLight[0]+ny*vectorToLight[1]+nz*vectorToLight[2])/lengthTL;
+            cosValue /= 2;
 
-            GLES20.glUniform1f(mCosHandle,cos_value);
-            // GLES20.glUniform1f(mCosHandle,1f);
+            GLES20.glUniform1f(mCosHandle, cosValue);
+//             GLES20.glUniform1f(mCosHandle,1f);
 
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,textureData[j]);
             GLES20.glUniform1i(mTextureUnit,0);
             GLES20.glDrawArrays(GLES20.GL_TRIANGLES, j*3, 3); //3 vertices for triangle
 
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,0);
         }
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,0);
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mTextCoordHandle);
