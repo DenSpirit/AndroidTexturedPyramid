@@ -36,8 +36,7 @@ const float pyramidCoords[] = {
         0.8,0.8,-0.8,1,0,
         -0.8,0.8,-0.8,0,0
 };
-const float vectorToLight[] ={2, 0, 0.5};
-const float lengthTL = sqrt(vectorToLight[0]*vectorToLight[0]+vectorToLight[1]*vectorToLight[1]+vectorToLight[2]*vectorToLight[2]);
+const glm::vec3 vectorToLight = glm::normalize(glm::vec3(2.0f, 0.0f, 0.5f));
 
 const char vertexShaderCode[] =
     "attribute vec4 aPosition;"
@@ -144,7 +143,6 @@ public:
         glActiveTexture(GL_TEXTURE0);
 
         for(int j=0;j<TRIANGLES_COUNT;j++){
-            /*
             //Берем три точки A(x1,y1,z1), B(x2,y2,z2),C(x3,y3,z3)
             //Считаем вектор нормали N(nx,ny,nz)
             int i = j*COORDINATES_PER_VERTEX*3;
@@ -165,22 +163,13 @@ public:
             float ny =z1*(x2 - x3) + z2*(x3 - x1) + z3*(x1 - x2);
             float nz =x1*(y2 - y3) + x2*(y3 - y1) + x3*(y1 - y2);
 
-            float lengthN = (float) sqrt(nx*nx+ny*ny+nz*nz);
-
-            auto norm = glm::vec4(nx, ny, nz, 1.f);
-            norm /= lengthN;
-
-            norm = mMVPMatrix * norm;
-            nx = norm[0];
-            ny = norm[1];
-            nz = norm[2];
+            auto norm = mMVPMatrix * glm::normalize(glm::vec4(nx, ny, nz, 1.f));
 
             //Рассчитываем косинус угла между нормалью и вектором источника света
-            float cosValue = (nx*vectorToLight[0]+ny*vectorToLight[1]+nz*vectorToLight[2])/lengthTL;
-//            cosValue /= 2;
-            */
-//            glUniform1f(mCosHandle, cosValue);
-             glUniform1f(mCosHandle,1.f);
+            float cosValue = glm::dot(glm::vec3(norm), vectorToLight);
+
+            glUniform1f(mCosHandle, cosValue);
+//             glUniform1f(mCosHandle,1.f);
 
             glBindTexture(GL_TEXTURE_2D, this->textureObjectsID[j]);
             glUniform1i(mTextureUnit, 0);
