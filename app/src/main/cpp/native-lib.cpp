@@ -1,7 +1,3 @@
-//
-// Created by kurai on 01.02.19.
-//
-
 #include <jni.h>
 #include "native-lib.h"
 #include <GLES2/gl2.h>
@@ -36,7 +32,7 @@ const float pyramidCoords[] = {
         0.8,0.8,-0.8,1,0,
         -0.8,0.8,-0.8,0,0
 };
-const glm::vec3 vectorToLight = glm::normalize(glm::vec3(2.0f, 0.0f, 0.5f));
+const glm::vec3 vectorToLight = glm::normalize(glm::vec3(2.f, 0.f, 5.f));
 
 const char vertexShaderCode[] =
     "attribute vec4 aPosition;"

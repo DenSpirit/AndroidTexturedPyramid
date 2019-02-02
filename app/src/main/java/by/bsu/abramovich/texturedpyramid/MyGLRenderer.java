@@ -47,7 +47,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer, AutoCloseable {
 
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
-        GLES20.glClearColor(0.9f,1f,0.9f,1f);
+        GLES20.glClearColor(0.2f,0.3f,0.2f,1f);
 
 //        pyramid = new Pyramid();
         pyramidNative = new PyramidNative();
