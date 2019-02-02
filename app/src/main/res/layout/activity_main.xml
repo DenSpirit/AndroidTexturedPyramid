@@ -81,11 +81,12 @@ android:layout_height="match_parent">
 
     <SeekBar
         android:id="@+id/seekScale"
-        android:layout_width="154dp"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_alignStart="@id/seekZ"
         android:layout_alignTop="@id/textScale"
-        android:max="100" />
+        android:layout_marginTop="0dp"
+        android:max="10000" />
 
 
 </RelativeLayout>

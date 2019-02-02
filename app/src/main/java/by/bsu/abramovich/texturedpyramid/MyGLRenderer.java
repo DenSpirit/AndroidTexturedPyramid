@@ -33,6 +33,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer, AutoCloseable {
 
     public MyGLRenderer(Context context) {
         this.context = context;
+        scale = 1;
     }
 
 

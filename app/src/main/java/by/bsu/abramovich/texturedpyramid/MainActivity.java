@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity
 
 
         seekScale = (SeekBar) findViewById(R.id.seekScale);
-        seekScale.setProgress(50);
+        seekScale.setProgress(5000);
         seekScale.setOnSeekBarChangeListener(this);
 
 
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity
         int scl = seekScale.getProgress();
         if(scl==0) scl = 1;
 
-        final float scale = ((float) scl) / 100f;
+        final float scale = scl / 5000.f;
 
         sw.queueEvent(new Runnable() {
             @Override
