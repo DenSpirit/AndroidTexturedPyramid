@@ -148,7 +148,7 @@ public:
         glActiveTexture(GL_TEXTURE0);
 
         for(int j=0;j<TRIANGLES_COUNT;j++){
-
+            /*
             //Берем три точки A(x1,y1,z1), B(x2,y2,z2),C(x3,y3,z3)
             //Считаем вектор нормали N(nx,ny,nz)
             int i = j*COORDINATES_PER_VERTEX*3;
@@ -182,7 +182,7 @@ public:
             //Рассчитываем косинус угла между нормалью и вектором источника света
             float cosValue = (nx*vectorToLight[0]+ny*vectorToLight[1]+nz*vectorToLight[2])/lengthTL;
 //            cosValue /= 2;
-
+            */
 //            glUniform1f(mCosHandle, cosValue);
              glUniform1f(mCosHandle,1.f);
 
