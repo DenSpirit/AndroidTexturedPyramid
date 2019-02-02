@@ -160,7 +160,7 @@ public class Pyramid {
             //Рассчитываем косинус угла между нормалью и вектором источника света
             float cosValue = (nx*vectorToLight[0]+ny*vectorToLight[1]+nz*vectorToLight[2])/lengthTL;
             cosValue /= 2;
-
+//
             GLES20.glUniform1f(mCosHandle, cosValue);
 //             GLES20.glUniform1f(mCosHandle,1f);
 

@@ -12,7 +12,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 
-public class MyGLRenderer implements GLSurfaceView.Renderer {
+public class MyGLRenderer implements GLSurfaceView.Renderer, AutoCloseable {
 
     Context context;
     private Pyramid pyramid;
@@ -22,6 +22,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private final float[] mModelMatrix = new float[16];
 
     final int textureObjectsID[] = new int[8];
+
+    private PyramidNative pyramidNative;
+    private float valueX;
+    private float valueY;
+    private float valueZ;
+    private float scale;
+    private float ratio;
+
 
     public MyGLRenderer(Context context) {
         this.context = context;
@@ -40,7 +48,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
         GLES20.glClearColor(0.9f,1f,0.9f,1f);
 
-        pyramid = new Pyramid();
+//        pyramid = new Pyramid();
+        pyramidNative = new PyramidNative();
 
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 
@@ -67,6 +76,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             bitmap.recycle();
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,0); //Unbind
         }
+        this.setTextures();
     }
 
     //frustumM(float[] m, int offset, float left, float right, float bottom, float top, float near, float far)
@@ -82,46 +92,33 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
      public void onSurfaceChanged(GL10 gl10, int w, int h) {
         GLES20.glViewport(0,0,w,h);
 
-        float ratio = w > h?(float)w/h:(float)h/w;
-
-        Matrix.setIdentityM(mModelMatrix,0);
-
-
-        Matrix.setLookAtM(mViewMatrix,0,
-                0.0f,1.5f,3f,
-                0f,0f,0f,
-                0f,1f,0);
-
-
-
-        Matrix.perspectiveM(mProjectionMatrix,0,45f,ratio,0.1f,10f);
-
-        Matrix.multiplyMM(mMVPMatrix,0,mViewMatrix,0,mModelMatrix,0);
-
-        Matrix.multiplyMM(mMVPMatrix,0,mProjectionMatrix,0,mMVPMatrix,0);
-
-
+        this.ratio = w > h?(float)w/h:(float)h/w;
+        setTransform();
     }
 
     public void onAction(float valueX,float valueY,float valueZ,float scale){
+        this.valueX = valueX;
+        this.valueY = valueY;
+        this.valueZ = valueZ;
+        this.scale = scale;
+        setTransform();
+    }
 
-        Matrix.setIdentityM(mModelMatrix,0);
+    private void setTransform() {
+        pyramidNative.setTransform(valueX, valueY, valueZ, scale, ratio);
+    }
 
-        Matrix.rotateM(mModelMatrix,0,valueX,1f,0f,0f);
-        Matrix.rotateM(mModelMatrix,0,valueY,0f,1f,0f);
-        Matrix.rotateM(mModelMatrix,0,valueZ,0f,0f,1f);
-
-        Matrix.scaleM(mModelMatrix,0,scale/5.0f,scale/5.0f,scale/5.0f);
-
-        Matrix.multiplyMM(mMVPMatrix,0,mViewMatrix,0,mModelMatrix,0);
-        Matrix.multiplyMM(mMVPMatrix,0,mProjectionMatrix,0,mMVPMatrix,0);
-
-
+    private void setTextures() {
+        pyramidNative.setTextures(this.textureObjectsID);
     }
 
     @Override
     public void onDrawFrame(GL10 gl10) {
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT|GLES20.GL_DEPTH_BUFFER_BIT);
-        pyramid.draw(mMVPMatrix,textureObjectsID);
+        pyramidNative.draw();
+    }
+
+    @Override
+    public void close() throws Exception {
+        pyramidNative.close();
     }
 }

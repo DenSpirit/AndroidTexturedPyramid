@@ -2,6 +2,7 @@ package by.bsu.abramovich.texturedpyramid;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -14,7 +15,6 @@ public class MainActivity extends AppCompatActivity
     SeekBar seekScale, seekX,seekY,seekZ;
 
     MyGLSurfaceView sw;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity
 
 
         seekScale = (SeekBar) findViewById(R.id.seekScale);
-        seekScale.setProgress(5);
+        seekScale.setProgress(50);
         seekScale.setOnSeekBarChangeListener(this);
 
 
@@ -52,6 +52,16 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onDestroy() {
+        try {
+            this.sw.close();
+        } catch (Exception e) {
+            Log.wtf("Closing", "onDestroy: failed, {}", e);
+        }
+        super.onDestroy();
+    }
+
+    @Override
     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
 
 
@@ -62,7 +72,7 @@ public class MainActivity extends AppCompatActivity
         int scl = seekScale.getProgress();
         if(scl==0) scl = 1;
 
-        final float scale = scl;
+        final float scale = ((float) scl) / 100f;
 
         sw.queueEvent(new Runnable() {
             @Override

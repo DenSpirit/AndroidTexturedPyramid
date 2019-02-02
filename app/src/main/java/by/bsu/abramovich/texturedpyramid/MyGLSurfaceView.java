@@ -3,7 +3,7 @@ package by.bsu.abramovich.texturedpyramid;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 
-public class MyGLSurfaceView extends GLSurfaceView {
+public class MyGLSurfaceView extends GLSurfaceView implements AutoCloseable {
     private final MyGLRenderer mRenderer;
 
     public MyGLSurfaceView(Context context) {
@@ -15,5 +15,10 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
     public MyGLRenderer getRenderer(){
         return mRenderer;
+    }
+
+    @Override
+    public void close() throws Exception {
+        mRenderer.close();
     }
 }

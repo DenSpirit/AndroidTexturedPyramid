@@ -79,16 +79,13 @@ android:layout_height="match_parent">
     />
 
 
-
-
-<SeekBar
-    android:id="@+id/seekScale"
-    android:layout_width="70dp"
-    android:layout_height="wrap_content"
-    android:layout_alignTop="@id/textScale"
-    android:layout_alignStart="@id/seekZ"
-    android:max="10"
-    />
+    <SeekBar
+        android:id="@+id/seekScale"
+        android:layout_width="154dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/seekZ"
+        android:layout_alignTop="@id/textScale"
+        android:max="100" />
 
 
 </RelativeLayout>
