@@ -106,15 +106,18 @@ public:
 
     void setProjections(float valueX, float valueY, float valueZ, float scale, float ratio) {
         auto model = glm::mat4(1.0f);
-        auto view = glm::lookAt(glm::vec3(0.f, 1.5f, 3.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
-        auto projection = glm::perspective(glm::radians(45.f), ratio, 0.1f, 10.f);
+//        auto view = glm::lookAt(glm::vec3(0.f, 1.5f, 3.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
+//        auto projection = glm::perspective(glm::radians(45.f), ratio, 0.1f, 10.f);
         model = glm::rotate(model, glm::radians(valueX), glm::vec3(1.f, 0.f, 0.f));
-        model = glm::rotate(model, glm::radians(valueY), glm::vec3(0.f, 1.f, 0.f));
-        model = glm::rotate(model, glm::radians(valueZ), glm::vec3(0.f, 0.f, 1.f));
-        model = glm::scale(model, glm::vec3(scale / 5.f));
-        auto mvp = view;
+//        model = glm::rotate(model, glm::radians(valueY), glm::vec3(0.f, 1.f, 0.f));
+//        model = glm::rotate(model, glm::radians(valueZ), glm::vec3(0.f, 0.f, 1.f));
+//        auto scaleVec = glm::vec3(1.f, 1.f, 1.f);
+//        scaleVec *= (scale / 5.f);
+//        model = glm::scale(model, scaleVec);
+        auto mvp = glm::mat4(1.0f);
+//        mvp *= view;
         mvp *= model;
-        mvp *= projection;
+//        mvp *= projection;
         this->mMVPMatrix = mvp;
     }
 
